@@ -1,0 +1,335 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Empty Stack 1`] = `
+Object {
+  "Outputs": Object {
+    "ToggleReportreportapiEndpoint65CA8BD9": Object {
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "https://",
+            Object {
+              "Ref": "ToggleReportreportapiBB706F97",
+            },
+            ".execute-api.",
+            Object {
+              "Ref": "AWS::Region",
+            },
+            ".",
+            Object {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            Object {
+              "Ref": "ToggleReportreportapiDeploymentStageprod76E50500",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "AssetParametersbd00bc6f933bc6d195801e099e7ea25b33a550435ef1c8d83937318c0a407b4fArtifactHash0FF4A6F0": Object {
+      "Description": "Artifact hash for asset \\"bd00bc6f933bc6d195801e099e7ea25b33a550435ef1c8d83937318c0a407b4f\\"",
+      "Type": "String",
+    },
+    "AssetParametersbd00bc6f933bc6d195801e099e7ea25b33a550435ef1c8d83937318c0a407b4fS3BucketB377ADBE": Object {
+      "Description": "S3 bucket for asset \\"bd00bc6f933bc6d195801e099e7ea25b33a550435ef1c8d83937318c0a407b4f\\"",
+      "Type": "String",
+    },
+    "AssetParametersbd00bc6f933bc6d195801e099e7ea25b33a550435ef1c8d83937318c0a407b4fS3VersionKeyE71E76C0": Object {
+      "Description": "S3 key for asset version \\"bd00bc6f933bc6d195801e099e7ea25b33a550435ef1c8d83937318c0a407b4f\\"",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "ToggleReportReportHandler2ABEE784": Object {
+      "DependsOn": Array [
+        "ToggleReportReportHandlerServiceRole2DDF77C9",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParametersbd00bc6f933bc6d195801e099e7ea25b33a550435ef1c8d83937318c0a407b4fS3BucketB377ADBE",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParametersbd00bc6f933bc6d195801e099e7ea25b33a550435ef1c8d83937318c0a407b4fS3VersionKeyE71E76C0",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParametersbd00bc6f933bc6d195801e099e7ea25b33a550435ef1c8d83937318c0a407b4fS3VersionKeyE71E76C0",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Handler": "report.lambda_handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "ToggleReportReportHandlerServiceRole2DDF77C9",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ToggleReportReportHandlerServiceRole2DDF77C9": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ToggleReportreportapiAccount47627B34": Object {
+      "DependsOn": Array [
+        "ToggleReportreportapiBB706F97",
+      ],
+      "Properties": Object {
+        "CloudWatchRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "ToggleReportreportapiCloudWatchRole49BBF545",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+    },
+    "ToggleReportreportapiBB706F97": Object {
+      "Properties": Object {
+        "Description": "Api to generate toggl report.",
+        "Name": "Toggl report API",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "ToggleReportreportapiCloudWatchRole49BBF545": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ToggleReportreportapiDeployment8ADE5E362d057ac780f2f086be3c86b9ec212760": Object {
+      "DependsOn": Array [
+        "ToggleReportreportapiGET85D70026",
+      ],
+      "Properties": Object {
+        "Description": "Automatically created by the RestApi construct",
+        "RestApiId": Object {
+          "Ref": "ToggleReportreportapiBB706F97",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "ToggleReportreportapiDeploymentStageprod76E50500": Object {
+      "Properties": Object {
+        "DeploymentId": Object {
+          "Ref": "ToggleReportreportapiDeployment8ADE5E362d057ac780f2f086be3c86b9ec212760",
+        },
+        "RestApiId": Object {
+          "Ref": "ToggleReportreportapiBB706F97",
+        },
+        "StageName": "prod",
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "ToggleReportreportapiGET85D70026": Object {
+      "Properties": Object {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": Object {
+          "IntegrationHttpMethod": "POST",
+          "RequestTemplates": Object {
+            "application/json": "{ \\"statusCode\\": \\"200\\" }",
+          },
+          "Type": "AWS_PROXY",
+          "Uri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "ToggleReportReportHandler2ABEE784",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": Object {
+          "Fn::GetAtt": Array [
+            "ToggleReportreportapiBB706F97",
+            "RootResourceId",
+          ],
+        },
+        "RestApiId": Object {
+          "Ref": "ToggleReportreportapiBB706F97",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ToggleReportreportapiGETApiPermissionMyTestStackToggleReportreportapi32830F43GET6DC1D9A0": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "ToggleReportReportHandler2ABEE784",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "ToggleReportreportapiBB706F97",
+              },
+              "/",
+              Object {
+                "Ref": "ToggleReportreportapiDeploymentStageprod76E50500",
+              },
+              "/GET/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ToggleReportreportapiGETApiPermissionTestMyTestStackToggleReportreportapi32830F43GET9A1D5C7D": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "ToggleReportReportHandler2ABEE784",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "ToggleReportreportapiBB706F97",
+              },
+              "/test-invoke-stage/GET/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+  },
+}
+`;
