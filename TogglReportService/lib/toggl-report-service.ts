@@ -1,11 +1,25 @@
 import * as core from "@aws-cdk/core";
 import * as apigateway from "@aws-cdk/aws-apigateway";
 import * as lambda from "@aws-cdk/aws-lambda";
+import * as s3 from "@aws-cdk/aws-s3";
+import * as s3Deployment from "@aws-cdk/aws-s3-deployment";
 import { PythonFunction } from "@aws-cdk/aws-lambda-python";
+import { RemovalPolicy } from "@aws-cdk/core";
 
 export class TogglReportService extends core.Construct {
   constructor(scope: core.Construct, id: string) {
     super(scope, id);
+
+    const bucket = new s3.Bucket(this, "toggl-rebort-website", {
+      publicReadAccess: true,
+      removalPolicy: RemovalPolicy.DESTROY,
+      websiteIndexDocument: "index.html"
+    });
+
+    new s3Deployment.BucketDeployment(this, "deployStaticWebsite", {
+      sources: [s3Deployment.Source.asset("../website")],
+      destinationBucket: bucket
+    });
 
     const handler = new PythonFunction(this, 'ReportHandlerPython', {
       entry: 'resources',
@@ -16,13 +30,16 @@ export class TogglReportService extends core.Construct {
 
     const api = new apigateway.RestApi(this, "report-api", {
       restApiName: "Toggl report API",
-      description: "Api to generate toggl report."
+      description: "Api to generate toggl report.",
+      binaryMediaTypes: ["*/*", "application/pdf"],
+      defaultCorsPreflightOptions: {
+        allowOrigins: apigateway.Cors.ALL_ORIGINS,
+        allowMethods: ["POST"]
+      }
     });
 
-    const getWidgetsIntegration = new apigateway.LambdaIntegration(handler, {
-      requestTemplates: { "application/json": '{ "statusCode": "200" }' }
-    });
+    const post = new apigateway.LambdaIntegration(handler);
 
-    api.root.addMethod("GET", getWidgetsIntegration);
+    api.root.addMethod("POST", post);
   }
 }
