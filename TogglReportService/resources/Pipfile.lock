@@ -64,11 +64,11 @@
         },
         "toggl-report": {
             "hashes": [
-                "sha256:2c3e769ed1286a21a087565119ec78f48839767a5635108eb3c34c2b1ce7b4e9",
-                "sha256:33cef91d7c239311b110be9bc1a4a48818ae9270a8ddcdaca8db1d3a8bc20b78"
+                "sha256:26c409e76d87671ebb4eb9224f81d49fb17ea835e88f9242e0e2e2daf8de20ea",
+                "sha256:34b5a15f6c398dd217527a2dd5ff132d5bb5895bd65dde73d36c60d4f78e552e"
             ],
             "index": "pypi",
-            "version": "==1.0.5"
+            "version": "==1.0.6"
         },
         "urllib3": {
             "hashes": [

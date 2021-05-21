@@ -10,7 +10,7 @@ export class TogglReportService extends core.Construct {
   constructor(scope: core.Construct, id: string) {
     super(scope, id);
 
-    const bucket = new s3.Bucket(this, "toggl-rebort-website", {
+    const bucket = new s3.Bucket(this, "TogglReportWebsite", {
       publicReadAccess: true,
       removalPolicy: RemovalPolicy.DESTROY,
       websiteIndexDocument: "index.html"
@@ -28,13 +28,12 @@ export class TogglReportService extends core.Construct {
       runtime: lambda.Runtime.PYTHON_3_8,
     });
 
-    const api = new apigateway.RestApi(this, "report-api", {
+    const api = new apigateway.RestApi(this, "ReportApi", {
       restApiName: "Toggl report API",
       description: "Api to generate toggl report.",
       binaryMediaTypes: ["*/*", "application/pdf"],
       defaultCorsPreflightOptions: {
         allowOrigins: apigateway.Cors.ALL_ORIGINS,
-        allowMethods: ["POST"]
       }
     });
 

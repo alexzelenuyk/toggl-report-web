@@ -3,33 +3,38 @@ import logging
 import base64
 import codecs
 from toggle_report_to_gulp.report import Report
+import locale
 
+locale.setlocale(locale.LC_ALL, 'de_DE')
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
 def lambda_handler(event, context):
     logger.info("Received request, body: %s", event)
-    body = event.get("body")
+
+    body = base64.b64decode(event.get("body")).decode("ascii")
     body_parsed = json.loads(body)
-    year = body_parsed["year"]
-    month = body_parsed["month_number"]
+    logger.info(body_parsed)
+    year = body_parsed.get("year")
+    month = body_parsed.get("month_number")
 
     report = Report(
-        body_parsed["api_key"],
-        body_parsed["name"],
-        body_parsed["project_number"],
-        body_parsed["client_name"],
-        body_parsed["order_no"]
+        body_parsed.get("api_key"),
+        body_parsed.get("name"),
+        body_parsed.get("project_number"),
+        body_parsed.get("client_name"),
+        body_parsed.get("order_no")
     )
-    document = report.detailed(body_parsed["workspace"], year, month, False)
-
-    report = Report("0f7178cbdc04c039c0aff7e7eb839917",
-                    "test", "test", "test", "test",)
-    document = report.detailed("Ole", 2021, 4, False)
+    document = report.detailed(
+        body_parsed.get("workspace"), year, month, False)
 
     response = {
         'headers': {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Expose-Headers": "Content-Disposition",
             "Content-Type": "application/pdf",
             "Content-Disposition": f"attachment; filename=Report_{year}_{month}.pdf"
         },
