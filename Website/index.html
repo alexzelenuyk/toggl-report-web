@@ -29,7 +29,6 @@
       InputLabel,
       FormControl,
       TextField,
-      Card,
       Grid,
       Button,
       Link,
@@ -38,7 +37,6 @@
     const {
       useState
     } = React
-
     const theme = createMuiTheme({});
     const useStyles = makeStyles(theme => ({
       paper: {
@@ -48,7 +46,6 @@
         alignItems: 'center',
       },
       form: {
-        width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(3),
       },
       submit: {
@@ -79,9 +76,8 @@
 
       const handleSubmit = async (event) => {
         event.preventDefault();
-        await setLoading(true);
-        console.log("submit form", state)
-        await fetch('https://97qb0dsp78.execute-api.eu-west-1.amazonaws.com/prod/', {
+        setLoading(true);
+        fetch('https://97qb0dsp78.execute-api.eu-west-1.amazonaws.com/prod/', {
           method: 'POST',
           body: JSON.stringify(state),
         })
@@ -106,8 +102,6 @@
             <Typography component="h1" variant="h5">
               Toggl report
             </Typography>
-
-
             <form className={classes.form} onSubmit={handleSubmit} disabled>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
@@ -185,7 +179,7 @@
                     onInput={handleChange}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6} sm={6}>
                   <FormControl variant="outlined" className={classes.formControl}>
                     <InputLabel htmlFor="input-month_number">Month</InputLabel>
                     <Select
@@ -193,16 +187,17 @@
                       value={state.month_number}
                       onChange={(e) => { setStateValue("month_number", parseInt(e.target.value, 10)) }}
                       label="Month"
-                      inputProps={{
-                        name: 'month_number',
-                        id: 'input-month_number',
-                      }}
+                      id="input-month_number"
                     >
-                      {Array.from({ length: 12 }, (item, i) => (<option key={`month-${i}`} value={i + 1}>{new Date(0, i).toLocaleString('en-EN', { month: 'long' })}</option>))}
+                      {Array.from({ length: 12 }, (item, i) => (
+                        <option key={`month-${i}`} value={i + 1}>
+                          {new Date(0, i).toLocaleString('en-EN', { month: 'long' })}
+                        </option>
+                      ))}
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6} sm={6}>
                   <FormControl variant="outlined" className={classes.formControl}>
                     <InputLabel htmlFor="input-year">Year</InputLabel>
                     <Select
@@ -215,7 +210,11 @@
                         id: 'input-year',
                       }}
                     >
-                      {Array.from({ length: 5 }, (item, i) => (<option key={`year-${i}`} value={i + state.year - 1}>{i + state.year - 1}</option>))}
+                      {Array.from({ length: 5 }, (item, i) => (
+                        <option key={`year-${i}`} value={i + state.year - 1}>
+                          {i + state.year - 1}
+                        </option>)
+                      )}
                     </Select>
                   </FormControl>
                 </Grid>
@@ -239,7 +238,6 @@
 
     ReactDOM.render(
       <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <App />
       </ThemeProvider>,
