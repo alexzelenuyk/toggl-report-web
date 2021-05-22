@@ -28,9 +28,10 @@ jobs:
         with:
           working_dir: 'TogglReportService'
           cdk_subcommand: 'deploy'
-          cdk_stack: 'stack1'
           cdk_args: '--require-approval never'
+          cdk_version: '1.102.0'
           actions_comment: false
+          cdk_stack: 'TogglReportServiceStack'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

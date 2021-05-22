@@ -27,20 +27,37 @@ jobs:
       #   uses: youyo/aws-cdk-github-actions@v2
       #   with:
       #     cdk_subcommand: 'diff'
-      #     actions_comment: true
+      #     cdk_version: '1.102.0'
       #     working_dir: 'TogglReportService'
+      #     actions_comment: false
+      #     cdk_stack: 'TogglReportServiceStack'
       #   env:
       #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+      #     AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }} 
 
-      - name: cdk synth
-        uses: youyo/aws-cdk-github-actions@v2
+      - name: cdk diff
+        uses: jd-carroll/aws-cdk-cli-commands@v1.1.10
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}  
         with:
           cdk_subcommand: 'synth'
           cdk_version: '1.102.0'
           working_dir: 'TogglReportService'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+          actions_comment: false
+          cdk_stack: 'TogglReportServiceStack'
+
+      # - name: cdk synth
+      #   uses: youyo/aws-cdk-github-actions@v2
+      #   with:
+      #     cdk_subcommand: 'synth'
+      #     cdk_version: '1.102.0'
+      #     working_dir: 'TogglReportService'
+      #     actions_comment: false
+      #     cdk_stack: 'TogglReportServiceStack'
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
