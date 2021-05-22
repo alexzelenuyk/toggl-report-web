@@ -13,7 +13,7 @@ export class TogglReportService extends core.Construct {
     const bucket = new s3.Bucket(this, "TogglReportWebsite", {
       publicReadAccess: true,
       removalPolicy: RemovalPolicy.DESTROY,
-      websiteIndexDocument: "index.html"
+      websiteIndexDocument: 'index.html',
     });
 
     new s3Deployment.BucketDeployment(this, "deployStaticWebsite", {
