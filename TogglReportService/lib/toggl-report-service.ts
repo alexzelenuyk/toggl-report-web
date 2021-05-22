@@ -17,7 +17,7 @@ export class TogglReportService extends core.Construct {
     });
 
     new s3Deployment.BucketDeployment(this, "deployStaticWebsite", {
-      sources: [s3Deployment.Source.asset("../Website")],
+      sources: [s3Deployment.Source.asset("../Website-foo")],
       destinationBucket: bucket
     });
 
