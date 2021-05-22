@@ -1,8 +1,9 @@
-# Welcome to your CDK TypeScript project!
+# CDK TypeScript project
 
-This is a blank project for TypeScript development with CDK.
+## Setup
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+Instal CDK:
+ - `npm i -g aws-cdk@1.102.0`
 
 ## Useful commands
 

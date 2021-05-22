@@ -1,0 +1,52 @@
+name: CDK
+
+on:
+  pull_request:
+    branches: [ master ]
+  push:
+    branches: [ master ]
+        
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      WORKING_DIR: TogglReportService
+      CDK_VERIONS: 1.102.0
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: setup cdk
+        run: |
+            sudo npm i -g aws-cdk@$CDK_VERIONS
+            npm i --prefix $WORKING_DIR
+
+      - name: cdk synth
+        run: |
+            cd $WORKING_DIR
+            cdk synth
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: cdk diff
+        run: |
+            cd $WORKING_DIR
+            cdk diff
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}          
+
+      - name: cdk deploy
+        if: github.event_name == 'push'
+        run: |
+            cd $WORKING_DIR
+            cdk deploy --require-approval never
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}          

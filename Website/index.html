@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Toggl report</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+  <script src="https://unpkg.com/react@latest/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@latest/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@material-ui/core@latest/umd/material-ui.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/babel-standalone@latest/babel.min.js" crossorigin="anonymous"></script>
+  <!-- Fonts to support Material Design -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <!-- Icons to support Material Design -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const {
+      CssBaseline,
+      ThemeProvider,
+      Typography,
+      Container,
+      makeStyles,
+      createMuiTheme,
+      Select,
+      InputLabel,
+      FormControl,
+      TextField,
+      Grid,
+      Button,
+      Link,
+      CircularProgress
+    } = MaterialUI;
+    const {
+      useState
+    } = React
+    const theme = createMuiTheme({});
+    const useStyles = makeStyles(theme => ({
+      paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      },
+      form: {
+        marginTop: theme.spacing(3),
+      },
+      submit: {
+        margin: theme.spacing(3, 0, 2),
+      },
+    }));
+
+    const App = () => {
+      const classes = useStyles();
+      const [state, setState] = useState({
+        api_key: "",
+        workspace: "",
+        name: "",
+        project_number: "",
+        client_name: "",
+        order_no: "",
+        month_number: new Date().getMonth(),
+        year: new Date().getFullYear()
+      });
+      const handleChange = ({ target }) => setStateValue(target.name, target.value);
+      const setStateValue = (name, value) => {
+        setState(prevState => ({
+          ...prevState,
+          [name]: value
+        }));
+      }
+      const [loading, setLoading] = useState(false);
+
+      const handleSubmit = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        fetch('https://97qb0dsp78.execute-api.eu-west-1.amazonaws.com/prod/', {
+          method: 'POST',
+          body: JSON.stringify(state),
+        })
+          .then(async response => {
+            const blob = await response.blob()
+            let link = document.createElement('a')
+            link.href = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+            link.download = response.headers.get('content-disposition').split("=")[1]
+            link.click()
+            setLoading(false)
+          })
+          .catch(error => {
+            console.error('Error:', error)
+            setLoading(false)
+          })
+      }
+
+      return (
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <div className={classes.paper}>
+            <Typography component="h1" variant="h5">
+              Toggl report
+            </Typography>
+            <form className={classes.form} onSubmit={handleSubmit} disabled>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="api_key"
+                    label="API key"
+                    name="api_key"
+                    value={state.api_key}
+                    autoComplete="api key"
+                    onInput={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="workspace"
+                    value={state.workspace}
+                    label="Workspace prefix"
+                    name="workspace"
+                    autoComplete="workspace"
+                    onInput={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="name"
+                    value={state.name}
+                    label="Reporter name"
+                    name="name"
+                    autoComplete="name"
+                    onInput={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    id="project_number"
+                    value={state.project_number}
+                    label="Project number"
+                    name="project_number"
+                    autoComplete="project number"
+                    onInput={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    id="client_name"
+                    value={state.client_name}
+                    label="Client name"
+                    name="client_name"
+                    autoComplete="client name"
+                    onInput={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    id="order_no"
+                    label="Order no name"
+                    name="order_no"
+                    value={state.order_no}
+                    autoComplete="order no"
+                    onInput={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                  <FormControl variant="outlined" className={classes.formControl}>
+                    <InputLabel htmlFor="input-month_number">Month</InputLabel>
+                    <Select
+                      native
+                      value={state.month_number}
+                      onChange={(e) => { setStateValue("month_number", parseInt(e.target.value, 10)) }}
+                      label="Month"
+                      id="input-month_number"
+                    >
+                      {Array.from({ length: 12 }, (item, i) => (
+                        <option key={`month-${i}`} value={i + 1}>
+                          {new Date(0, i).toLocaleString('en-EN', { month: 'long' })}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                  <FormControl variant="outlined" className={classes.formControl}>
+                    <InputLabel htmlFor="input-year">Year</InputLabel>
+                    <Select
+                      native
+                      value={state.year}
+                      onChange={(e) => { setStateValue("year", parseInt(e.target.value, 10)) }}
+                      label="Year"
+                      inputProps={{
+                        name: 'year',
+                        id: 'input-year',
+                      }}
+                    >
+                      {Array.from({ length: 5 }, (item, i) => (
+                        <option key={`year-${i}`} value={i + state.year - 1}>
+                          {i + state.year - 1}
+                        </option>)
+                      )}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                disabled={loading}
+                className={classes.submit}
+              >
+                Generate report {loading && <CircularProgress />}
+              </Button>
+            </form>
+
+          </div>
+        </Container>
+      );
+    }
+
+    ReactDOM.render(
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>,
+      document.querySelector('#root'),
+    );
+  </script>
+</body>
+
+</html>

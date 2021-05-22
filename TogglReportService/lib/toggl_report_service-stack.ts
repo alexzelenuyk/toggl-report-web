@@ -5,6 +5,6 @@ export class TogglReportServiceStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    new toggl_report_service.TogglReportService(this, 'ToggleReport');
+    new toggl_report_service.TogglReportService(this, 'TogglReport');
   }
 }
