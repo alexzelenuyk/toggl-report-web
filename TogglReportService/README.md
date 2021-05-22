@@ -3,7 +3,7 @@
 ## Setup
 
 Instal CDK:
- - `npm i -g aws-cdk`
+ - `npm i -g aws-cdk@1.102.0`
 
 ## Useful commands
 
