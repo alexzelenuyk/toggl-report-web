@@ -3,6 +3,8 @@ import * as apigateway from "@aws-cdk/aws-apigateway";
 import * as lambda from "@aws-cdk/aws-lambda";
 import * as s3 from "@aws-cdk/aws-s3";
 import * as s3Deployment from "@aws-cdk/aws-s3-deployment";
+import * as cloudfront from '@aws-cdk/aws-cloudfront';
+import * as origins from '@aws-cdk/aws-cloudfront-origins';
 import { PythonFunction } from "@aws-cdk/aws-lambda-python";
 import { RemovalPolicy } from "@aws-cdk/core";
 
@@ -14,6 +16,10 @@ export class TogglReportService extends core.Construct {
       publicReadAccess: true,
       removalPolicy: RemovalPolicy.DESTROY,
       websiteIndexDocument: 'index.html',
+    });
+
+    new cloudfront.Distribution(this, 'CloudfrontDistribution', {
+      defaultBehavior: { origin: new origins.S3Origin(bucket) },
     });
 
     new s3Deployment.BucketDeployment(this, "deployStaticWebsite", {
