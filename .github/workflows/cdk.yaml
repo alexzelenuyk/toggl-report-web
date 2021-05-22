@@ -42,7 +42,7 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}          
 
       - name: cdk deploy
-        if: github.event.pull_request.merged == true
+        if: github.event_name == 'push'
         run: |
             cd $WORKING_DIR
             cdk deploy --require-approval never
