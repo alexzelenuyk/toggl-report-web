@@ -1,3 +1,5 @@
+![build](https://github.com/github/docs/actions/workflows/cdk.yml/badge.svg)
+
 # Toggle report web
 
 A Static web form (React/MaterialUI) with an Backend Infrastructure (AWS CDK/API Gateway/Lambda) to generate a PDF report summary from [Toggl](https://toggl.com/) account.
