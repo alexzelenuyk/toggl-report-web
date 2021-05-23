@@ -1,4 +1,4 @@
-[![Actions Status](https://github.com/alexzelenuyk/toggl-report-web/workflows/cdk/badge.svg)](https://github.com/alexzelenuyk/toggl-report-web/actions)
+[![Actions Status](https://github.com/alexzelenuyk/toggl-report-web/workflows/CDK/badge.svg)](https://github.com/alexzelenuyk/toggl-report-web/actions)
 
 
 # Toggle report web
