@@ -25,7 +25,7 @@ export class TogglReportService extends core.Construct {
       entry: 'resources',
       index: 'report.py',
       handler: 'lambda_handler',
-      runtime: lambda.Runtime.PYTHON_3_8,
+      runtime: lambda.Runtime.PYTHON_3_9,
     });
 
     const api = new apigateway.RestApi(this, "ReportApi", {
